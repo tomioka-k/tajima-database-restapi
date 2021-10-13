@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models.specification import Category, Base, Slope, Part, Paste, Walk, Specification
+from .models.document import SpecificationDocumentCategory, SpecificationDocument
 
 
 @admin.register(Category)
@@ -19,3 +20,7 @@ class SpecificationAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     list_display = ('name', 'method_name', "part", 'paste',
                     'slope', 'walk', 'is_insulation')
+
+
+admin.site.register(SpecificationDocumentCategory)
+admin.site.register(SpecificationDocument)
