@@ -13,8 +13,7 @@ def specification_document_path(instance, filename):
 
 
 class SpecificationDocumentCategory(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="仕様書類カテゴリ名",
                             max_length=100, unique=True)
 

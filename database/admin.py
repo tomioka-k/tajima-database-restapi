@@ -11,6 +11,21 @@ admin.site.register(Paste)
 admin.site.register(Walk)
 
 
+class SpecificationDocumentInline(admin.TabularInline):
+    model = SpecificationDocument
+    fk_name = "specification"
+    autocomplete_fields = ('category',)
+    extra = 0
+
+
+class SpecificationProcessInline(admin.TabularInline):
+    model = SpecificationProcess
+    fk_name = "specification"
+    autocomplete_fields = ('material',)
+    ordering = ('order',)
+    extra = 0
+
+
 @admin.register(MethodCategory)
 class MethodCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
@@ -29,14 +44,6 @@ class BaseAdmin(admin.ModelAdmin):
     search_fields = ('name', )
 
 
-class SpecificationProcessInline(admin.TabularInline):
-    model = SpecificationProcess
-    fk_name = "specification"
-    autocomplete_fields = ('material',)
-    ordering = ('order',)
-    extra = 0
-
-
 @admin.register(Specification)
 class SpecificationAdmin(admin.ModelAdmin):
     search_fields = ('name', 'slug')
@@ -47,7 +54,8 @@ class SpecificationAdmin(admin.ModelAdmin):
                     'walk', 'slope', 'is_insulation', 'format_image')
 
     inlines = [
-        SpecificationProcessInline
+        SpecificationProcessInline,
+        SpecificationDocumentInline
     ]
 
     def format_image(self, obj):
@@ -71,7 +79,22 @@ class SpecificationDocumentCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-admin.site.register(SpecificationDocument)
+@admin.register(SpecificationDocument)
+class SpecificationDocumentAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'specification__name')
+    autocomplete_fields = ('category', 'specification')
+    list_display = ('name', 'category', 'specification', 'file_link')
+    list_filter = ('category__name',)
+
+    def file_link(self, obj):
+        if obj.file:
+            return format_html('<a href="{}" download>Download</a>', obj.file.url)
+        else:
+            return "No attachment"
+
+    file_link.allow_tags = True
+    file_link.short_description = 'File Download'
+
 
 admin.site.register(MaterialCategory)
 

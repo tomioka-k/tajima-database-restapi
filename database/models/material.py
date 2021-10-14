@@ -37,8 +37,8 @@ class MaterialCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "材料カテゴリ"
-        verbose_name_plural = "材料カテゴリ一覧"
+        verbose_name = "商品カテゴリ"
+        verbose_name_plural = "商品カテゴリ"
 
 
 class Material(models.Model):
