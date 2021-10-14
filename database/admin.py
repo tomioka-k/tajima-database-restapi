@@ -96,9 +96,29 @@ class SpecificationDocumentAdmin(admin.ModelAdmin):
     file_link.short_description = 'File Download'
 
 
+class MaterialInline(admin.TabularInline):
+    model = Material
+    fields = ('name', 'normalize_name', 'standard', 'remarks')
+    can_delete = False
+    extra = 0
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_readonly_fields(self, request, obj=None):
+        return list(super().get_fields(request, obj))
+
+
 @admin.register(MaterialCategory)
 class MaterialCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
+    inlines = (MaterialInline,)
 
 
 @admin.register(Material)
