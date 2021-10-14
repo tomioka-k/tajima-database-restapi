@@ -96,14 +96,18 @@ class SpecificationDocumentAdmin(admin.ModelAdmin):
     file_link.short_description = 'File Download'
 
 
-admin.site.register(MaterialCategory)
+@admin.register(MaterialCategory)
+class MaterialCategoryAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
 
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
     search_fields = ('name', 'normarize_name')
-    list_display = ('name', 'normalize_name', 'standard',
+    list_display = ('name', 'normalize_name', 'category', 'standard',
                     'remarks', 'bto', 'format_material_image')
+    list_filter = ('category__name', 'bto')
+    autocomplete_fields = ('category',)
     ordering = ('name',)
 
     def format_material_image(self, obj):

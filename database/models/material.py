@@ -44,6 +44,8 @@ class MaterialCategory(models.Model):
 class Material(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=50, blank=True, null=True)
+    category = models.ForeignKey(
+        MaterialCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
     name = models.CharField(verbose_name="商品名", max_length=100)
     normalize_name = models.CharField(
         verbose_name="一般名称",
