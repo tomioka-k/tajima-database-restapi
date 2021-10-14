@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification
+from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification, SpecificationProcess
 from .models.document import SpecificationDocumentCategory, SpecificationDocument
+from .models.material import MaterialCategory, Material
 
 
 admin.site.register(MethodCategory)
@@ -19,5 +20,9 @@ class SpecificationAdmin(admin.ModelAdmin):
                     'slope', 'walk', 'is_insulation')
 
 
+admin.site.register(SpecificationProcess)
 admin.site.register(SpecificationDocumentCategory)
 admin.site.register(SpecificationDocument)
+
+admin.site.register(MaterialCategory)
+admin.site.register(Material)

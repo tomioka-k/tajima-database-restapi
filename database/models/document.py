@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields.related import ForeignKey
 from .specification import Specification
 from django.contrib.auth import get_user_model
 import datetime
@@ -30,8 +29,8 @@ class SpecificationDocument(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
         SpecificationDocumentCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
-    specification = ForeignKey(Specification, verbose_name="仕様",
-                               related_name="document", on_delete=models.PROTECT)
+    specification = models.ForeignKey(Specification, verbose_name="仕様",
+                                      related_name="document", on_delete=models.PROTECT)
     name = models.CharField(verbose_name="名称", max_length=100)
     file = models.FileField(
         verbose_name="ファイル", upload_to=specification_document_path)
