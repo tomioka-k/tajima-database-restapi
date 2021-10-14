@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from database.models.specification import Specification
+from database.models.specification import Method, Specification
 from database.models.document import SpecificationDocument
 
 
@@ -12,8 +12,17 @@ class SpecificationDocumentSerializer(serializers.ModelSerializer):
         fields = ('category', 'file')
 
 
+class MethodSeriarizer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+
+    class Meta:
+        model = Method
+        fields = ('category', 'name', 'normalize_name')
+
+
 class SpecificationSerializer(serializers.ModelSerializer):
 
+    method = MethodSeriarizer(read_only=True)
     base = serializers.StringRelatedField(many=True)
     part = serializers.StringRelatedField()
     paste = serializers.StringRelatedField()
@@ -21,12 +30,13 @@ class SpecificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Specification
-        fields = ('id', 'name', 'method_name', 'description', 'base',
+        fields = ('id', 'name', 'method', 'method_name', 'description', 'base',
                   'part', 'paste', 'walk', 'is_insulation', 'remarks', 'image')
 
 
 class SpecificationDetailSerializer(serializers.ModelSerializer):
 
+    method = MethodSeriarizer(read_only=True)
     base = serializers.StringRelatedField(many=True)
     part = serializers.StringRelatedField()
     paste = serializers.StringRelatedField()

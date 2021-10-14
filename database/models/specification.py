@@ -17,28 +17,34 @@ def specification_cad_path(instance, filename):
     return 'images/specification/{}/{}/{}.{}'.format(instance.id, "cad", datetime.date.today(), filename.split('.')[-1])
 
 
-class Category(models.Model):
-
+class MethodCategory(models.Model):
     id = models.CharField(primary_key=True, editable=True,
                           validators=[validators.alphanumeric], max_length=50)
-    name = models.CharField(
-        verbose_name="カテゴリ",
-        max_length=255,
-        unique=True,
-        help_text="防水材料のカテゴリ"
-    )
-    description = models.TextField(
-        verbose_name="説明文",
-        max_length=1000,
-        blank=True
-    )
+    name = models.CharField(verbose_name="名称", max_length=50, unique=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = "カテゴリ"
-        verbose_name_plural = "カテゴリ一覧"
+        verbose_name = "工法カテゴリ"
+        verbose_name_plural = "工法カテゴリ"
+
+
+class Method(models.Model):
+    id = models.CharField(primary_key=True, editable=True,
+                          validators=[validators.alphanumeric], max_length=50)
+    category = models.ForeignKey(
+        MethodCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
+    name = models.CharField(verbose_name="名称", max_length=50, unique=True)
+    normalize_name = models.CharField(verbose_name="一般名称", max_length=100)
+    release_date = models.DateField(verbose_name="発売日")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "工法"
+        verbose_name_plural = "工法"
 
 
 class Base(models.Model):
@@ -111,6 +117,8 @@ class Specification(models.Model):
     id = models.CharField(primary_key=True, editable=True,
                           validators=[validators.alphanumeric], max_length=50)
     name = models.CharField(verbose_name="仕様名", max_length=255, unique=True)
+    method = models.ForeignKey(
+        Method, verbose_name="工法", on_delete=models.PROTECT)
     method_name = models.CharField(
         verbose_name="工法名", max_length=255, blank=True)
     description = models.CharField(
@@ -143,9 +151,9 @@ class Specification(models.Model):
     remarks = models.TextField(verbose_name="備考", blank=True)
     image = models.ImageField(
         verbose_name="イメージ図", upload_to=specification_image_path, blank=True)
-    interface = models.ImageField(
+    interface = models.FileField(
         verbose_name="納まり図", upload_to=specification_interface_path, blank=True)
-    cad = models.ImageField(
+    cad = models.FileField(
         verbose_name="CAD図", upload_to=specification_cad_path, blank=True)
     created_at = models.DateField(verbose_name="作成日", auto_now_add=True)
     updated_at = models.DateField(verbose_name="更新日", auto_now=True)

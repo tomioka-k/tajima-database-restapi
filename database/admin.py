@@ -1,13 +1,10 @@
 from django.contrib import admin
-from .models.specification import Category, Base, Slope, Part, Paste, Walk, Specification
+from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification
 from .models.document import SpecificationDocumentCategory, SpecificationDocument
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    fields = ('id', 'name', 'description')
-
-
+admin.site.register(MethodCategory)
+admin.site.register(Method)
 admin.site.register(Base)
 admin.site.register(Slope)
 admin.site.register(Part)
