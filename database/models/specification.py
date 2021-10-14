@@ -23,7 +23,7 @@ def specification_cad_path(instance, filename):
 class MethodCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=50, blank=True, null=True)
-    name = models.CharField(verbose_name="名称", max_length=50, unique=True)
+    name = models.CharField(verbose_name="カテゴリ名", max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -38,7 +38,7 @@ class Method(models.Model):
     slug = models.SlugField(max_length=50, blank=True, null=True)
     category = models.ForeignKey(
         MethodCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
-    name = models.CharField(verbose_name="名称", max_length=50, unique=True)
+    name = models.CharField(verbose_name="工法名", max_length=50, unique=True)
     normalize_name = models.CharField(verbose_name="一般名称", max_length=100)
     release_date = models.DateField(verbose_name="発売日")
 
@@ -219,7 +219,7 @@ class SpecificationProcess(models.Model):
     remarks = models.CharField(verbose_name="備考", max_length=255, blank=True)
 
     def __str__(self):
-        return "{}:{}".format(self.order, self.material.name)
+        return "{}_{}_{}".format(self.order, self.material.name, self.specification)
 
     class Meta:
         verbose_name = "仕様工程"
