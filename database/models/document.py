@@ -8,12 +8,12 @@ from ..function import validators
 
 
 def specification_document_path(instance, filename):
-    return 'images/specification/{}/{}/{}_{}.{}'.format(instance.specification.id, "document", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/specification/{}/{}/{}/{}_{}_{}.{}'.format(
+        instance.specification, "document", instance.category, instance.category, instance.specification, datetime.date.today(), filename.split('.')[-1])
 
 
 class SpecificationDocumentCategory(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="仕様書類カテゴリ名",
                             max_length=100, unique=True)
 

@@ -7,22 +7,24 @@ from ..function import validators
 
 
 def material_image_path(instance, filename):
-    return 'images/material/{}/{}/{}_{}.{}'.format(instance.name, "image", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/material/{}/{}/{}_{}_{}.{}'.format(instance.name, "image", instance.name, "image", datetime.date.today(), filename.split('.')[-1])
 
 
 def material_label_image_path(instance, filename):
-    return 'images/material/{}/{}/{}_{}.{}'.format(instance.name, "label_image", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/material/{}/{}/{}_{}_{}.{}'.format(instance.name, "label_image", instance.name, "label_image", datetime.date.today(), filename.split('.')[-1])
 
 
 def material_packing_image_path(instance, filename):
-    return 'images/material/{}/{}/{}_{}.{}'.format(instance.name, "packing_image", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/material/{}/{}/{}_{}_{}.{}'.format(instance.name, "packing_image", instance.name, "packing_image", datetime.date.today(), filename.split('.')[-1])
 
 
 def material_cad_path(instance, filename):
-    return 'images/material/{}/{}/{}_{}.{}'.format(instance.name, "cad", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/material/{}/{}/{}_{}_{}.{}'.format(instance.name, "cad", instance.name, "cad", datetime.date.today(), filename.split('.')[-1])
 
 
 class MaterialCategory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(max_length=50, blank=True, null=True)
     name = models.CharField(
         verbose_name="材料種別",
         max_length=50,
@@ -35,13 +37,15 @@ class MaterialCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "材料カテゴリ"
-        verbose_name_plural = "材料カテゴリ一覧"
+        verbose_name = "商品カテゴリ"
+        verbose_name_plural = "商品カテゴリ"
 
 
 class Material(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=50, blank=True, null=True)
+    category = models.ForeignKey(
+        MaterialCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
     name = models.CharField(verbose_name="商品名", max_length=100)
     normalize_name = models.CharField(
         verbose_name="一般名称",
