@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 
+from .material import Material
 from ..function import validators
 
 
@@ -166,3 +168,63 @@ class Specification(models.Model):
     class Meta:
         verbose_name = "仕様"
         verbose_name_plural = "仕様一覧"
+
+
+class SpecificationProcess(models.Model):
+    specification = models.ForeignKey(
+        Specification,
+        verbose_name="仕様",
+        related_name='process',
+        on_delete=models.PROTECT
+    )
+    order = models.IntegerField(
+        verbose_name="行程",
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(100)
+        ],
+        help_text="行程は1-20の間です"
+    )
+    material = models.ForeignKey(
+        Material,
+        verbose_name="材料",
+        related_name="process",
+        on_delete=models.PROTECT
+    )
+    unit = models.IntegerField(
+        verbose_name="単位",
+        choices=(
+            (0, "個"),
+            (1, "kg/㎡")
+        ),
+        blank=True,
+        null=True
+    )
+    min_quantity = models.FloatField(
+        verbose_name="最小数量",
+        help_text="数量に幅が無い場合には最小数量を記入します",
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(0.001),
+            MaxValueValidator(1000.000)
+        ]
+    )
+    max_quantity = models.FloatField(
+        verbose_name="最大数量",
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(0.001),
+            MaxValueValidator(1000.000)
+        ]
+    )
+    remarks = models.CharField(verbose_name="備考", max_length=255, blank=True)
+
+    def __str__(self):
+        return "{}:{}".format(self.order, self.material.name)
+
+    class Meta:
+        verbose_name = "仕様工程"
+        verbose_name_plural = "仕様工程"
+        ordering = ('order', )
