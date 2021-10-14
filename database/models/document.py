@@ -8,7 +8,8 @@ from ..function import validators
 
 
 def specification_document_path(instance, filename):
-    return 'images/specification/{}/{}/{}_{}.{}'.format(instance.specification.id, "document", instance.name, datetime.date.today(), filename.split('.')[-1])
+    return 'database/specification/{}/{}/{}/{}_{}_{}.{}'.format(
+        instance.specification, "document", instance.category, instance.category, instance.specification, datetime.date.today(), filename.split('.')[-1])
 
 
 class SpecificationDocumentCategory(models.Model):

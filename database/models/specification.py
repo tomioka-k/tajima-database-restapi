@@ -2,26 +2,27 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
+import uuid
 
 from .material import Material
 from ..function import validators
 
 
 def specification_image_path(instance, filename):
-    return 'images/specification/{}/{}/{}.{}'.format(instance.id, "image", datetime.date.today(), filename.split('.')[-1])
+    return 'database/specification/{}/{}/{}_{}_{}.{}'.format(instance.name, "image", instance.name, "image", datetime.date.today(), filename.split('.')[-1])
 
 
 def specification_interface_path(instance, filename):
-    return 'images/specification/{}/{}/{}.{}'.format(instance.id, "interface", datetime.date.today(), filename.split('.')[-1])
+    return 'database/specification/{}/{}/{}_{}_{}.{}'.format(instance.name, "interface", instance.name, "interface", datetime.date.today(), filename.split('.')[-1])
 
 
 def specification_cad_path(instance, filename):
-    return 'images/specification/{}/{}/{}.{}'.format(instance.id, "cad", datetime.date.today(), filename.split('.')[-1])
+    return 'database/specification/{}/{}/{}_{}_{}.{}'.format(instance.name, "cad", instance.name, "cad", datetime.date.today(), filename.split('.')[-1])
 
 
 class MethodCategory(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(max_length=50, blank=True, null=True)
     name = models.CharField(verbose_name="名称", max_length=50, unique=True)
 
     def __str__(self):
@@ -33,8 +34,8 @@ class MethodCategory(models.Model):
 
 
 class Method(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(max_length=50, blank=True, null=True)
     category = models.ForeignKey(
         MethodCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
     name = models.CharField(verbose_name="名称", max_length=50, unique=True)
@@ -50,8 +51,7 @@ class Method(models.Model):
 
 
 class Base(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="下地", max_length=255, unique=True)
 
     def __str__(self):
@@ -63,8 +63,7 @@ class Base(models.Model):
 
 
 class Slope(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     length = models.CharField(verbose_name="勾配", max_length=20)
 
     def __str__(self):
@@ -76,8 +75,7 @@ class Slope(models.Model):
 
 
 class Part(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="部位", max_length=50)
 
     def __str__(self):
@@ -89,8 +87,7 @@ class Part(models.Model):
 
 
 class Paste(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="貼り方", max_length=50)
 
     def __str__(self):
@@ -102,8 +99,7 @@ class Paste(models.Model):
 
 
 class Walk(models.Model):
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="歩行用途", max_length=50)
 
     def __str__(self):
@@ -116,8 +112,8 @@ class Walk(models.Model):
 
 class Specification(models.Model):
     """ 仕様 """
-    id = models.CharField(primary_key=True, editable=True,
-                          validators=[validators.alphanumeric], max_length=50)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    slug = models.SlugField(max_length=50, blank=True, null=True)
     name = models.CharField(verbose_name="仕様名", max_length=255, unique=True)
     method = models.ForeignKey(
         Method, verbose_name="工法", on_delete=models.PROTECT)
@@ -171,6 +167,7 @@ class Specification(models.Model):
 
 
 class SpecificationProcess(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     specification = models.ForeignKey(
         Specification,
         verbose_name="仕様",
