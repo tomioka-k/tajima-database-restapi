@@ -11,6 +11,6 @@ class SpecificationListAPIView(generics.ListAPIView):
 
 
 class SpecificationRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = Specification.objects.filter(is_display=True)
+    queryset = Specification.objects.filter(is_display=True).select_related()
     serializer_class = SpecificationDetailSerializer
-    lookup_field = 'id'
+    lookup_field = 'slug'
