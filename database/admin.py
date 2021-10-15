@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification, SpecificationProcess
-from .models.document import SpecificationDocumentCategory, SpecificationDocument
+from .models.document import SpecificationDocumentCategory, SpecificationDocument, MaterialDocumentCategory, MaterialDocument
 from .models.material import MaterialCategory, Material
 
 
@@ -123,7 +123,7 @@ class MaterialCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    search_fields = ('name', 'normarize_name')
+    search_fields = ('name',)
     list_display = ('name', 'normalize_name', 'category', 'standard',
                     'remarks', 'bto', 'format_material_image')
     list_filter = ('category__name', 'bto')
@@ -136,3 +136,15 @@ class MaterialAdmin(admin.ModelAdmin):
 
     format_material_image.short_description = "Image"
     format_material_image.empty_value_display = 'No Image'
+
+
+@admin.register(MaterialDocumentCategory)
+class MaterialDocumentCategoryAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+
+
+@admin.register(MaterialDocument)
+class MaterialDocumentAdmin(admin.ModelAdmin):
+    list_display = ('category', 'material', 'name', 'is_display')
+    list_filter = ('is_display', 'category__name')
+    autocomplete_fields = ('category', 'material')
