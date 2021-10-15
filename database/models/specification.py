@@ -225,3 +225,30 @@ class SpecificationProcess(models.Model):
         verbose_name = "仕様工程"
         verbose_name_plural = "仕様工程"
         ordering = ('order', )
+
+
+class SpecificationCompose(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    main_specification = models.ForeignKey(
+        Specification,
+        verbose_name="メイン仕様",
+        related_name='compose',
+        on_delete=models.PROTECT
+    )
+    order = models.IntegerField(
+        verbose_name="表示順序",
+        help_text="使用頻度など"
+    )
+    sub_specification = models.ForeignKey(
+        Specification,
+        verbose_name="サブ仕様",
+        related_name='sub_compose',
+        on_delete=models.PROTECT
+    )
+
+    def __str__(self):
+        return "{} => {}".format(self.main_specification, self.sub_specification)
+
+    class Meta:
+        verbose_name = "仕様構成"
+        verbose_name_plural = "仕様構成"
