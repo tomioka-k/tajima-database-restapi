@@ -145,6 +145,8 @@ class MaterialDocumentCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(MaterialDocument)
 class MaterialDocumentAdmin(admin.ModelAdmin):
-    list_display = ('category', 'material', 'name', 'is_display')
+    search_fields = ('name', )
+    list_display = ('category', 'material', 'name',
+                    'is_display', 'created_at', 'updated_at')
     list_filter = ('is_display', 'category__name')
     autocomplete_fields = ('category', 'material')
