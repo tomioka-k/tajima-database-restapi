@@ -1,12 +1,29 @@
-from django.db.models import fields
 from rest_framework import serializers
 from database.models.specification import Method, Specification, SpecificationProcess
-from database.models.document import SpecificationDocument
+from database.models.document import SpecificationDocument, MaterialDocument
 from database.models.material import Material
 
 
+class MaterialDocumentSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+
+    class Meta:
+        model = MaterialDocument
+        fields = ('category', 'file')
+
+
+class MaterialSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
+    document = MaterialDocumentSerializer(many=True)
+
+    class Meta:
+        model = Material
+        fields = ('slug', 'name', 'category', 'normalize_name',
+                  'standard', 'material_image', 'document')
+
+
 class SpecificationProcessSerializer(serializers.ModelSerializer):
-    material = serializers.StringRelatedField()
+    material = MaterialSerializer()
     unit = serializers.CharField(source='get_unit_display')
 
     class Meta:
@@ -66,5 +83,5 @@ class SpecificationDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Specification
-        fields = ('id', 'name', 'method_name', 'method', 'description', 'part', 'paste', 'walk', 'base', 'slope', 'is_insulation',
+        fields = ('slug', 'name', 'method_name', 'method', 'description', 'part', 'paste', 'walk', 'base', 'slope', 'is_insulation',
                   'weight', 'thickness', 'co2_usage', 'service_life', 'remarks', 'image', 'interface', 'cad', 'process', 'document')
