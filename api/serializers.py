@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from database.models.specification import Method, Specification, SpecificationProcess
 from database.models.document import SpecificationDocument, MaterialDocument
