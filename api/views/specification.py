@@ -1,14 +1,16 @@
 from rest_framework import generics
+from django_filters import rest_framework as filters
 from database.models.specification import Specification, SpecificationCompose
 from database.models.document import SpecificationDocument
-from .serializers import SpecificationDocumentSerializer, SpecificationProcessSerializer, SpecificationSerializer, SpecificationDetailSerializer
-
-# Create your views here.
+from api.serializers.database import SpecificationDocumentSerializer, SpecificationProcessSerializer, SpecificationSerializer, SpecificationDetailSerializer
+from api.filters import SpecificationFilter
 
 
 class SpecificationListAPIView(generics.ListAPIView):
     queryset = Specification.objects.filter(is_display=True)
     serializer_class = SpecificationSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = SpecificationFilter
 
 
 class SpecificationRetrieveAPIView(generics.RetrieveAPIView):

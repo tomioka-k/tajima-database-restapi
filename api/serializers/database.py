@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
-from database.models.specification import Method, Specification, SpecificationProcess, SpecificationCompose
+from database.models.specification import Base, Method, MethodCategory, Paste, Specification, SpecificationProcess, SpecificationCompose, Walk
 from database.models.document import SpecificationDocument, MaterialDocument
 from database.models.material import Material
 
@@ -48,12 +48,40 @@ class SpecificationDocumentSerializer(serializers.ModelSerializer):
         fields = ('category', 'file')
 
 
+class MethodCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MethodCategory
+        fields = ('id', 'name')
+
+
 class MethodSeriarizer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
 
     class Meta:
         model = Method
-        fields = ('category', 'name', 'normalize_name')
+        fields = ('id', 'category', 'name', 'normalize_name')
+
+
+class BaseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Base
+        fields = ('id', 'name')
+
+
+class PasteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Paste
+        fields = ('id', 'name')
+
+
+class WalkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Walk
+        fields = ('id', 'name')
 
 
 class SpecificationSerializer(serializers.ModelSerializer):
