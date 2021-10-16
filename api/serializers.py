@@ -87,6 +87,18 @@ class SpecificationDetailSerializer(serializers.ModelSerializer):
                   'weight', 'thickness', 'co2_usage', 'service_life', 'remarks', 'image', 'interface', 'cad', 'process')
 
 
+class SpecificationProcessSerializer(serializers.ModelSerializer):
+
+    method = MethodSeriarizer(read_only=True)
+    process = SpecificationProcessSerializer(
+        many=True, read_only=True)
+
+    class Meta:
+        model = Specification
+        fields = ('slug', 'name', 'method_name',
+                  'method', 'remarks', 'process')
+
+
 class SpecificationComposeSerializer(serializers.ModelSerializer):
 
     name = StringRelatedField(source='sub_specification')

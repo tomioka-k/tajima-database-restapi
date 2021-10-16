@@ -5,7 +5,6 @@ import datetime
 import uuid
 
 from .material import Material
-from ..function import validators
 
 
 def specification_image_path(instance, filename):

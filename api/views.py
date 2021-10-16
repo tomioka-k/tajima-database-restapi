@@ -1,7 +1,7 @@
 from rest_framework import generics
 from database.models.specification import Specification, SpecificationCompose
 from database.models.document import SpecificationDocument
-from .serializers import SpecificationComposeSerializer, SpecificationDocumentSerializer, SpecificationProcessSerializer, SpecificationSerializer, SpecificationDetailSerializer
+from .serializers import SpecificationDocumentSerializer, SpecificationProcessSerializer, SpecificationSerializer, SpecificationDetailSerializer
 
 # Create your views here.
 
@@ -28,7 +28,7 @@ class SpecificationDocumentListAPIView(generics.ListAPIView):
 
 
 class SpecificationComposeListAPIView(generics.ListAPIView):
-    serializer_class = SpecificationDetailSerializer
+    serializer_class = SpecificationProcessSerializer
 
     def get_queryset(self):
         slug = self.kwargs['slug']
