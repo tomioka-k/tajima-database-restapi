@@ -6,8 +6,8 @@ urlpatterns = [
          name="specification-list"),
     path('specification/<str:slug>/', SpecificationRetrieveAPIView.as_view(),
          name="specification-detail"),
-    path('specification/<str:specification__slug>/document/',
+    path('specification/<str:slug>/document/',
          SpecificationDocumentListAPIView.as_view(), name="specification-document"),
-    path('specification/<str:sub_specification__slug>/sub_process/', SpecificationComposeListAPIView.as_view(),
+    path('specification/<str:slug>/sub_process/', SpecificationComposeListAPIView.as_view(),
          name='specification-sub-process'),
 ]

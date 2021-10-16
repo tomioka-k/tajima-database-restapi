@@ -91,9 +91,8 @@ class SpecificationComposeSerializer(serializers.ModelSerializer):
 
     name = StringRelatedField(source='sub_specification')
     specification = SpecificationDetailSerializer(source='sub_specification')
-    sub_specification__process = serializers.StringRelatedField()
 
     class Meta:
         model = SpecificationCompose
         fields = ('order', 'name', 'specification',
-                  'sub_specification__process')
+                  )

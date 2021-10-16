@@ -113,7 +113,7 @@ class Walk(models.Model):
 class Specification(models.Model):
     """ 仕様 """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slug = models.SlugField(max_length=50, blank=True, null=True)
+    slug = models.SlugField(max_length=50, unique=True, blank=True, null=True)
     name = models.CharField(verbose_name="仕様名", max_length=255, unique=True)
     method = models.ForeignKey(
         Method, verbose_name="工法", on_delete=models.PROTECT)
