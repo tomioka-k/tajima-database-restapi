@@ -1,5 +1,7 @@
+from django.db.models import fields
 from rest_framework import serializers
-from database.models.specification import Method, Specification, SpecificationProcess
+from rest_framework.relations import StringRelatedField
+from database.models.specification import Method, Specification, SpecificationProcess, SpecificationCompose
 from database.models.document import SpecificationDocument, MaterialDocument
 from database.models.material import Material
 
@@ -64,7 +66,7 @@ class SpecificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Specification
-        fields = ('id', 'name', 'method', 'method_name', 'description', 'base',
+        fields = ('slug', 'name', 'method', 'method_name', 'description', 'base',
                   'part', 'paste', 'walk', 'is_insulation', 'remarks', 'image')
 
 
@@ -76,12 +78,22 @@ class SpecificationDetailSerializer(serializers.ModelSerializer):
     paste = serializers.StringRelatedField()
     walk = serializers.StringRelatedField()
     slope = serializers.StringRelatedField()
-    document = SpecificationDocumentSerializer(
-        many=True, read_only=True)
     process = SpecificationProcessSerializer(
         many=True, read_only=True)
 
     class Meta:
         model = Specification
         fields = ('slug', 'name', 'method_name', 'method', 'description', 'part', 'paste', 'walk', 'base', 'slope', 'is_insulation',
-                  'weight', 'thickness', 'co2_usage', 'service_life', 'remarks', 'image', 'interface', 'cad', 'process', 'document')
+                  'weight', 'thickness', 'co2_usage', 'service_life', 'remarks', 'image', 'interface', 'cad', 'process')
+
+
+class SpecificationComposeSerializer(serializers.ModelSerializer):
+
+    name = StringRelatedField(source='sub_specification')
+    specification = SpecificationDetailSerializer(source='sub_specification')
+    sub_specification__process = serializers.StringRelatedField()
+
+    class Meta:
+        model = SpecificationCompose
+        fields = ('order', 'name', 'specification',
+                  'sub_specification__process')

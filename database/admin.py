@@ -26,6 +26,14 @@ class SpecificationProcessInline(admin.TabularInline):
     extra = 0
 
 
+class SpecificationComposeInline(admin.TabularInline):
+    model = SpecificationCompose
+    fk_name = 'main_specification'
+    autocomplete_fields = ('sub_specification',)
+    ordering = ('order', )
+    extra = 0
+
+
 @admin.register(MethodCategory)
 class MethodCategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
@@ -55,7 +63,8 @@ class SpecificationAdmin(admin.ModelAdmin):
 
     inlines = [
         SpecificationProcessInline,
-        SpecificationDocumentInline
+        SpecificationComposeInline,
+        SpecificationDocumentInline,
     ]
 
     def format_image(self, obj):
