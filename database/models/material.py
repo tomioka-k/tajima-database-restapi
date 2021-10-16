@@ -24,7 +24,7 @@ def material_cad_path(instance, filename):
 
 class MaterialCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slug = models.SlugField(max_length=50, blank=True, null=True)
+    slug = models.SlugField(max_length=50, blank=True, null=True, unique=True)
     name = models.CharField(
         verbose_name="材料種別",
         max_length=50,
@@ -43,7 +43,7 @@ class MaterialCategory(models.Model):
 
 class Material(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slug = models.SlugField(max_length=50, blank=True, null=True)
+    slug = models.SlugField(max_length=50, blank=True, null=True, unique=True)
     category = models.ForeignKey(
         MaterialCategory, verbose_name="カテゴリ", on_delete=models.PROTECT)
     name = models.CharField(verbose_name="商品名", max_length=100)
