@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification, SpecificationProcess
+from .models.specification import MethodCategory, Method, Base, Slope, Part, Paste, Walk, Specification, SpecificationProcess, SpecificationCompose
 from .models.document import SpecificationDocumentCategory, SpecificationDocument, MaterialDocumentCategory, MaterialDocument
 from .models.material import MaterialCategory, Material
 
@@ -23,6 +23,14 @@ class SpecificationProcessInline(admin.TabularInline):
     fk_name = "specification"
     autocomplete_fields = ('material',)
     ordering = ('order',)
+    extra = 0
+
+
+class SpecificationComposeInline(admin.TabularInline):
+    model = SpecificationCompose
+    fk_name = 'main_specification'
+    autocomplete_fields = ('sub_specification',)
+    ordering = ('order', )
     extra = 0
 
 
@@ -55,7 +63,8 @@ class SpecificationAdmin(admin.ModelAdmin):
 
     inlines = [
         SpecificationProcessInline,
-        SpecificationDocumentInline
+        SpecificationComposeInline,
+        SpecificationDocumentInline,
     ]
 
     def format_image(self, obj):
@@ -94,6 +103,13 @@ class SpecificationDocumentAdmin(admin.ModelAdmin):
 
     file_link.allow_tags = True
     file_link.short_description = 'File Download'
+
+
+@admin.register(SpecificationCompose)
+class SpeficificationComposeAdmin(admin.ModelAdmin):
+    search_fields = ('main_specification', 'sub_specification')
+    list_display = ('order', 'main_specification', 'sub_specification')
+    autocomplete_fields = ('main_specification', 'sub_specification')
 
 
 class MaterialInline(admin.TabularInline):
