@@ -1,9 +1,16 @@
 from rest_framework import generics
+from rest_framework import pagination
 from django_filters import rest_framework as filters
 from database.models.specification import Specification, SpecificationCompose
 from database.models.document import SpecificationDocument
 from api.serializers.database import SpecificationDocumentSerializer, SpecificationProcessSerializer, SpecificationSerializer, SpecificationDetailSerializer
 from api.filters import SpecificationFilter
+
+
+class CustomPagination(pagination.PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 50
 
 
 class SpecificationListAPIView(generics.ListAPIView):

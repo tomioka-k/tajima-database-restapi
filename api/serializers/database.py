@@ -20,7 +20,7 @@ class MaterialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Material
-        fields = ('slug', 'name', 'category', 'normalize_name',
+        fields = ('slug', 'name', 'category', 'normalize_name', 'description',
                   'standard', 'material_image', 'document')
 
 
@@ -52,15 +52,18 @@ class MethodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MethodCategory
-        fields = ('id', 'name')
+        fields = ('id', 'slug', 'name', 'description', 'image')
 
 
 class MethodSeriarizer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
+    category_slug = serializers.SlugRelatedField(
+        slug_field='slug', read_only=True, source='category')
 
     class Meta:
         model = Method
-        fields = ('id', 'category', 'name', 'normalize_name')
+        fields = ('id', 'category', 'category_slug',
+                  'slug', 'name', 'normalize_name')
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -118,13 +121,14 @@ class SpecificationDetailSerializer(serializers.ModelSerializer):
 class SpecificationProcessSerializer(serializers.ModelSerializer):
 
     method = MethodSeriarizer(read_only=True)
+    part = serializers.StringRelatedField()
     process = SpecificationProcessSerializer(
         many=True, read_only=True)
 
     class Meta:
         model = Specification
         fields = ('slug', 'name', 'method_name',
-                  'method', 'remarks', 'process')
+                  'method', 'part', 'remarks', 'process')
 
 
 class SpecificationComposeSerializer(serializers.ModelSerializer):
