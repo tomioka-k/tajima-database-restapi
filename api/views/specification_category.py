@@ -13,14 +13,14 @@ class MethodCategoryListAPIView(generics.ListAPIView):
 
 
 class MethodListAPIView(generics.ListAPIView):
-    queryset = Method.objects.all()
+    queryset = Method.objects.all().select_related('category')
     serializer_class = MethodSeriarizer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = MethodFilter
 
 
 class MethodRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = Method.objects.all()
+    queryset = Method.objects.all().select_related('category')
     serializer_class = MethodSeriarizer
     lookup_field = 'slug'
 
