@@ -19,10 +19,17 @@ def specification_cad_path(instance, filename):
     return 'database/specification/{}/{}/{}_{}_{}.{}'.format(instance.name, "cad", instance.name, "cad", datetime.date.today(), filename.split('.')[-1])
 
 
+def method_category_image_path(instance, filename):
+    return 'database/method_category/{}/{}/{}_{}.{}'.format(instance.name, 'image', instance.name, datetime.date.today(), filename.split('.')[-1])
+
+
 class MethodCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=50, blank=True, null=True, unique=True)
     name = models.CharField(verbose_name="カテゴリ名", max_length=50, unique=True)
+    description = models.TextField(verbose_name="説明文", blank=True)
+    image = models.ImageField(
+        verbose_name="イメージ図", upload_to=method_category_image_path, blank=True)
 
     def __str__(self):
         return self.name
