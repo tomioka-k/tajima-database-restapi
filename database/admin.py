@@ -9,6 +9,7 @@ admin.site.register(Slope)
 admin.site.register(Part)
 admin.site.register(Paste)
 admin.site.register(Walk)
+admin.site.register(SpecificationCompose)
 
 
 class SpecificationDocumentInline(admin.TabularInline):
@@ -103,13 +104,6 @@ class SpecificationDocumentAdmin(admin.ModelAdmin):
 
     file_link.allow_tags = True
     file_link.short_description = 'File Download'
-
-
-@admin.register(SpecificationCompose)
-class SpeficificationComposeAdmin(admin.ModelAdmin):
-    search_fields = ('main_specification', 'sub_specification')
-    list_display = ('order', 'main_specification', 'sub_specification')
-    autocomplete_fields = ('main_specification', 'sub_specification')
 
 
 class MaterialInline(admin.TabularInline):

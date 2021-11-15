@@ -243,6 +243,10 @@ class SpecificationCompose(models.Model):
     )
     order = models.IntegerField(
         verbose_name="表示順序",
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(100)
+        ],
         help_text="使用頻度など"
     )
     sub_specification = models.ForeignKey(
